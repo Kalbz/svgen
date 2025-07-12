@@ -1,22 +1,25 @@
+
+
 export function createBlob(options = {}) {
     const wrapper = document.getElementById('svgContainer');
-    wrapper.innerHTML = ''; // Clear previous blob
+    wrapper.innerHTML = '';
 
-    // Default options with Haikei.app-like settings
+
     const config = {
-        width: options.width || 400,
-        height: options.height || 400,
-        centerX: options.centerX || 200,
-        centerY: options.centerY || 200,
-        radius: options.radius || 120,
-        pointCount: options.pointCount || 12, // More points for smoother blobs
-        noise: options.noise || 0.3, // 0-1, controls how "wiggly" the blob is
-        smoothness: options.smoothness || 0.8, // 0-1, controls curve smoothness
-        fill: options.fill || '#FFFF00',
-        stroke: options.stroke || '#00000010',
-        strokeWidth: options.strokeWidth || 1,
-        ...options
+        ...options,
+        width: options.width ?? 400,
+        height: options.height ?? 400,
+        centerX: options.centerX ?? 100,
+        centerY: options.centerY ?? 100,
+        radius: options.radius ?? 60,
+        pointCount: options.pointCount ?? 12,
+        noise: options.noise ?? 0.3,
+        smoothness: options.smoothness ?? 0.8,
+        fill: options.fill ?? '#FFFF00',
+        stroke: options.stroke ?? '#00000010',
+        strokeWidth: options.strokeWidth ?? 1,
     };
+
 
     const svgNS = "http://www.w3.org/2000/svg";
     const svg = document.createElementNS(svgNS, "svg");

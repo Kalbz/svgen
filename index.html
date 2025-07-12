@@ -1,26 +1,137 @@
-<!doctype html>
-<html lang="en" data-theme="cupcake">
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite App</title>
   </head>
-  <body>
-    <div id="app"></div>
-<!-- 
-    <button id="changeShape">Change Shape</button>
-    <button id="changeColor">Change Color</button> -->
 
-    <div class="hero" ></div>
-
-    <!-- <button id="randomShape"> Random Shape</button> -->
-
-    <div id="svgContainer">
-
+  <body class="bg-base-100 min-h-screen flex flex-col">
+    <!-- Navbar -->
+    <div class="navbar bg-base-100 shadow-sm justify-center">
+      <div id="generatorSwitcher" class="mt-4 space-x-2">
+        <button data-generator="blob" class="btn btn-primary">Blob</button>
+        <button data-generator="wave" class="btn btn-secondary">Wave</button>
+        <button data-generator="corners" class="btn btn-accent">Corners</button>
+      </div>
     </div>
 
-    
+    <main class="relative min-h-screen flex items-center justify-center bg-base-100">
+      <!-- Main Display -->
+      <div class="w-[1000px] aspect-[1500/1002] bg-base-300 rounded-xl shadow-lg flex items-center justify-center">
+        <svg id="svgContainer" class="w-full h-full"></svg>
+      </div>
+
+      <!-- Sidebar Controls -->
+      <div class="absolute right-[10%] top-1/2 -translate-y-1/2 w-[300px] h-[668px] bg-base-200 rounded-xl shadow-lg p-4 overflow-y-auto">
+
+        <!-- Blob Controls -->
+        <div id="sliderControls" class="hidden flex flex-col gap-4">
+          <h3 class="text-lg font-bold">Blob Controls</h3>
+
+          <label class="form-control w-full">
+            <span class="label-text">Point Count</span>
+            <input id="pointCount" type="range" min="3" max="20" step="1" class="range" />
+          </label>
+
+          <label class="form-control w-full">
+            <span class="label-text">Noise</span>
+            <input id="noise" type="range" min="0" max="1" step="0.01" class="range" />
+          </label>
+
+          <label class="form-control w-full">
+            <span class="label-text">Smoothness</span>
+            <input id="smoothness" type="range" min="0" max="1" step="0.01" class="range" />
+          </label>
+
+          <label class="form-control w-full">
+            <span class="label-text">Radius</span>
+            <input id="radius" type="range" min="50" max="200" step="1" class="range" />
+          </label>
+
+          <label class="form-control w-full">
+            <span class="label-text">Stroke Width</span>
+            <input id="strokeWidth" type="range" min="0" max="5" step="0.1" class="range" />
+          </label>
+
+          <label class="form-control w-full">
+            <span class="label-text">Fill Color</span>
+            <input id="fillColor" type="color" class="input" />
+          </label>
+
+          <label class="form-control w-full">
+            <span class="label-text">Stroke Color</span>
+            <input id="strokeColor" type="color" class="input" />
+          </label>
+
+          <button id="resetBlob" class="btn btn-error text-white mt-4">Reset to Default</button>
+        </div>
+
+        <!-- Wave Controls -->
+        <div id="waveControls" class="hidden flex flex-col gap-4">
+          <h3 class="text-lg font-bold">Wave Settings</h3>
+
+          <label class="form-control w-full">
+            <span class="label-text">Amount</span>
+            <input id="waveAmount" type="range" min="2" max="20" step="1" class="range" />
+          </label>
+
+          <label class="form-control w-full">
+            <span class="label-text">Complexity</span>
+            <input id="waveComplexity" type="range" min="0" max="1" step="0.01" class="range" />
+          </label>
+
+          <label class="form-control w-full">
+            <span class="label-text">Contrast</span>
+            <input id="waveContrast" type="range" min="0" max="1" step="0.01" class="range" />
+          </label>
+
+          <label class="form-control w-full">
+            <span class="label-text">Base Color</span>
+            <input id="waveBaseColor" type="color" class="input" />
+          </label>
+        </div>
+
+        <!-- Corners Controls -->
+        <div id="cornersControls" class="hidden flex flex-col gap-4">
+          <h3 class="text-lg font-bold">Corner Blobs</h3>
+
+          <label class="form-control w-full">
+            <span class="label-text">Color Steps</span>
+            <input id="cornerSteps" type="range" min="2" max="12" step="1" class="range" />
+          </label>
+
+          <label class="form-control w-full">
+            <span class="label-text">Complexity</span>
+            <input id="cornerComplexity" type="range" min="0" max="1" step="0.01" class="range" />
+          </label>
+
+          <label class="form-control w-full">
+            <span class="label-text">Points</span>
+            <input id="cornerPoints" type="range" min="3" max="16" step="1" class="range" />
+          </label>
+
+          <label class="form-control w-full">
+            <span class="label-text">Blob Size</span>
+            <input id="cornerSize" type="range" min="100" max="600" step="1" class="range" />
+          </label>
+
+          <label class="form-control w-full">
+            <span class="label-text">Corners</span>
+            <select id="cornerSelect" class="select select-bordered w-full">
+              <option value="tlbr">Top Left & Bottom Right</option>
+              <option value="trbl">Top Right & Bottom Left</option>
+            </select>
+          </label>
+
+          <label class="form-control w-full">
+            <span class="label-text">Base Color</span>
+            <input id="cornerBaseColor" type="color" class="input" />
+          </label>
+        </div>
+      </div>
+    </main>
 
     <script type="module" src="/src/main.js"></script>
   </body>
