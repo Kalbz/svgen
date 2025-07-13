@@ -25,5 +25,7 @@ export const cornersConfig = {
     points: 8,
     randomness: 0.3,
     whichCorners: 'tlbr', // 'tlbr' or 'trbl'
-    size: 50,
+    size: 250,
+    scaleStep: 0.12, // this controls how much each layer scales
+
 };

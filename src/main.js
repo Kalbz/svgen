@@ -27,11 +27,40 @@ const GENERATORS = {
 
 let currentGenerator = 'blob';
 
+const svg = document.getElementById('svgContainer');
+svg.setAttribute('viewBox', '0 0 1500 1002');
+svg.setAttribute('width', '100%');
+svg.setAttribute('height', '100%');
+
+
+function clearSVGContent() {
+  const svg = document.getElementById('svgContainer');
+  ['#mainBlob', '#cornerBlobs', '#waves'].forEach((id) => {
+    svg.querySelector(id)?.remove();
+  });
+}
+
+document.getElementById('downloadSVG')?.addEventListener('click', () => {
+  const svg = document.getElementById('svgContainer');
+  const serializer = new XMLSerializer();
+  const svgString = serializer.serializeToString(svg);
+
+  const blob = new Blob([svgString], { type: 'image/svg+xml' });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'corner-blobs.svg';
+  a.click();
+
+  URL.revokeObjectURL(url);
+});
 
 
 
-// Main render toggle
 function render() {
+  clearSVGContent();
+
   if (currentGenerator === 'blob') {
     createBlob(blobConfig);
     document.getElementById('sliderControls').classList.remove('hidden');
@@ -39,16 +68,17 @@ function render() {
     document.getElementById('cornersControls')?.classList.add('hidden');
   } else if (currentGenerator === 'wave') {
     createAutoStackedWaves();
-    document.getElementById('sliderControls').classList.add('hidden');
+    document.getElementById('sliderControls')?.classList.add('hidden');
     document.getElementById('waveControls')?.classList.remove('hidden');
     document.getElementById('cornersControls')?.classList.add('hidden');
   } else if (currentGenerator === 'corners') {
     createCornersBlobs();
-    document.getElementById('sliderControls').classList.add('hidden');
+    document.getElementById('sliderControls')?.classList.add('hidden');
     document.getElementById('waveControls')?.classList.add('hidden');
     document.getElementById('cornersControls')?.classList.remove('hidden');
   }
 }
+
 
 
 document.querySelectorAll('#generatorSwitcher button').forEach((btn) => {

@@ -18,28 +18,25 @@ export function createLayeredBlobSVG({
   if (!pts) {
     pts = generateBlobPoints(cx, cy, r, points, randomness);
   }
-  const svgWidth = width || cx * 2;
-  const svgHeight = height || cy * 2;
-  const masterSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  masterSvg.setAttribute('viewBox', `0 0 ${svgWidth} ${svgHeight}`);
-  masterSvg.setAttribute('width', `${svgWidth}`);
-  masterSvg.setAttribute('height', `${svgHeight}`);
-  masterSvg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+
+  // Create a group instead of a nested SVG
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const group = document.createElementNS(svgNS, 'g');
 
   for (let i = 0; i < numLayers; i++) {
     const d = createSmoothBlobPathFromPoints(pts);
-    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    const path = document.createElementNS(svgNS, 'path');
     path.setAttribute('d', d);
     path.setAttribute('fill', colors[i % colors.length]);
     path.setAttribute('opacity', `${0.5 + i * opacityStep}`);
     // Scale and center
     const scale = 1 + (numLayers - i - 1) * scaleStep;
-    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    const g = document.createElementNS(svgNS, 'g');
     g.setAttribute('transform', `translate(${cx}, ${cy}) scale(${scale}) translate(${-cx}, ${-cy})`);
     g.appendChild(path);
-    masterSvg.appendChild(g);
+    group.appendChild(g);
   }
-  return masterSvg;
+  return group;
 }
 
 // Generate points for a blob

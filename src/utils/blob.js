@@ -1,50 +1,46 @@
 
-
 export function createBlob(options = {}) {
-    const wrapper = document.getElementById('svgContainer');
-    wrapper.innerHTML = '';
+  const svg = document.getElementById('svgContainer');
 
+  // Remove existing blob (but leave other things like corner blobs)
+  svg.querySelector('#mainBlob')?.remove();
 
-    const wrapperBounds = wrapper.getBoundingClientRect();
-    const width = wrapperBounds.width;
-    const height = wrapperBounds.height;
+  const width = 1500;
+  const height = 1002;
 
+  const config = {
+    ...options,
+    width,
+    height,
+    centerX: options.centerX ?? width / 2,
+    centerY: options.centerY ?? height / 2,
+    radius: options.radius ?? 60,
+    pointCount: options.pointCount ?? 12,
+    noise: options.noise ?? 0.3,
+    smoothness: options.smoothness ?? 0.8,
+    fill: options.fill ?? '#FFFF00',
+    stroke: options.stroke ?? '#00000010',
+    strokeWidth: options.strokeWidth ?? 1,
+  };
 
-    const config = {
-        ...options,
-        width,
-        height,
-        centerX: options.centerX ?? width / 2,
-        centerY: options.centerY ?? height / 2,
-        radius: options.radius ?? 60,
-        pointCount: options.pointCount ?? 12,
-        noise: options.noise ?? 0.3,
-        smoothness: options.smoothness ?? 0.8,
-        fill: options.fill ?? '#FFFF00',
-        stroke: options.stroke ?? '#00000010',
-        strokeWidth: options.strokeWidth ?? 1,
-    };
+  const points = generateBlobPoints(config);
+  const pathData = createSmoothPath(points, config);
 
+  const svgNS = "http://www.w3.org/2000/svg";
 
-    const svgNS = "http://www.w3.org/2000/svg";
-    const svg = document.createElementNS(svgNS, "svg");
-    svg.setAttribute("width", config.width);
-    svg.setAttribute("height", config.height);
-    svg.setAttribute("viewBox", `0 0 ${config.width} ${config.height}`);
+  const path = document.createElementNS(svgNS, 'path');
+  path.setAttribute('d', pathData);
+  path.setAttribute('fill', config.fill);
+  path.setAttribute('stroke', config.stroke);
+  path.setAttribute('stroke-width', config.strokeWidth);
 
-    const points = generateBlobPoints(config);
-    const pathData = createSmoothPath(points, config);
+  const group = document.createElementNS(svgNS, 'g');
+  group.setAttribute('id', 'mainBlob');
+  group.appendChild(path);
 
-    // Add to SVG
-    const path = document.createElementNS(svgNS, "path");
-    path.setAttribute("d", pathData);
-    path.setAttribute("fill", config.fill);
-    path.setAttribute("stroke", config.stroke);
-    path.setAttribute("stroke-width", config.strokeWidth);
-
-    svg.appendChild(path);
-    wrapper.appendChild(svg);
+  svg.appendChild(group);
 }
+
 
 function generateBlobPoints(config) {
     const points = [];
