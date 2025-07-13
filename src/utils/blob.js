@@ -5,12 +5,17 @@ export function createBlob(options = {}) {
     wrapper.innerHTML = '';
 
 
+    const wrapperBounds = wrapper.getBoundingClientRect();
+    const width = wrapperBounds.width;
+    const height = wrapperBounds.height;
+
+
     const config = {
         ...options,
-        width: options.width ?? 400,
-        height: options.height ?? 400,
-        centerX: options.centerX ?? 100,
-        centerY: options.centerY ?? 100,
+        width,
+        height,
+        centerX: options.centerX ?? width / 2,
+        centerY: options.centerY ?? height / 2,
         radius: options.radius ?? 60,
         pointCount: options.pointCount ?? 12,
         noise: options.noise ?? 0.3,

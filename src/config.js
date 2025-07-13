@@ -25,5 +25,5 @@ export const cornersConfig = {
     points: 8,
     randomness: 0.3,
     whichCorners: 'tlbr', // 'tlbr' or 'trbl'
-    size: 800,
+    size: 50,
 };
