@@ -14,6 +14,7 @@ import './style.css'
 
 import { hslToHex } from './utils/hex';
 
+import { createScatterEffect } from './utils/scatter'
 
 randomTheme();
 createBlob(blobConfig);
@@ -35,10 +36,15 @@ svg.setAttribute('height', '100%');
 
 function clearSVGContent() {
   const svg = document.getElementById('svgContainer');
+
   ['#mainBlob', '#cornerBlobs', '#waves'].forEach((id) => {
     svg.querySelector(id)?.remove();
   });
+
+  // Remove all scattered blobs
+  svg.querySelectorAll('.scatterBlob').forEach(el => el.remove());
 }
+
 
 document.getElementById('downloadSVG')?.addEventListener('click', () => {
   const svg = document.getElementById('svgContainer');
@@ -66,19 +72,27 @@ function render() {
     document.getElementById('sliderControls').classList.remove('hidden');
     document.getElementById('waveControls')?.classList.add('hidden');
     document.getElementById('cornersControls')?.classList.add('hidden');
+    document.getElementById('scatterControls')?.classList.add('hidden');
   } else if (currentGenerator === 'wave') {
     createAutoStackedWaves();
     document.getElementById('sliderControls')?.classList.add('hidden');
     document.getElementById('waveControls')?.classList.remove('hidden');
     document.getElementById('cornersControls')?.classList.add('hidden');
+    document.getElementById('scatterControls')?.classList.add('hidden');
   } else if (currentGenerator === 'corners') {
     createCornersBlobs();
     document.getElementById('sliderControls')?.classList.add('hidden');
     document.getElementById('waveControls')?.classList.add('hidden');
     document.getElementById('cornersControls')?.classList.remove('hidden');
+    document.getElementById('scatterControls')?.classList.add('hidden');
+  } else if (currentGenerator === 'scatter') {
+    createScatterEffect();
+    document.getElementById('sliderControls').classList.add('hidden');
+    document.getElementById('waveControls')?.classList.add('hidden');
+    document.getElementById('cornersControls')?.classList.add('hidden');
+    document.getElementById('scatterControls')?.classList.remove('hidden');
   }
 }
-
 
 
 document.querySelectorAll('#generatorSwitcher button').forEach((btn) => {
@@ -208,6 +222,27 @@ document.getElementById('cornerBaseColor')?.addEventListener('input', (e) => {
   render();
 });
 
+
+
+// --- Bind Scatter Controls ---
+document.getElementById('scatterCount')?.addEventListener('input', (e) => {
+  localStorage.setItem('scatterCount', e.target.value);
+  render();
+});
+
+document.getElementById('scatterMinRadius')?.addEventListener('input', (e) => {
+  localStorage.setItem('scatterMinRadius', e.target.value);
+  render();
+});
+
+document.getElementById('scatterMaxRadius')?.addEventListener('input', (e) => {
+  localStorage.setItem('scatterMaxRadius', e.target.value);
+  render();
+});
+
+document.getElementById('scatterRandomize')?.addEventListener('click', () => {
+  render();
+});
 
 function updateBlob(newConfig) {
   Object.assign(blobConfig, newConfig);

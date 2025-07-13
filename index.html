@@ -9,17 +9,19 @@
 
   <body class="bg-base-100 min-h-screen flex flex-col">
     <!-- Navbar -->
-    <div class="navbar bg-base-100 shadow-sm justify-center">
-      <div id="generatorSwitcher" class="mt-4 space-x-2">
-        <button data-generator="blob" class="btn btn-primary">Blob</button>
-        <button data-generator="wave" class="btn btn-secondary">Wave</button>
-        <button data-generator="corners" class="btn btn-accent">Corners</button>
-        <button id="downloadSVG" class="btn btn-outline mt-4">Download SVG</button>
-
-      </div>
+  <div class="navbar bg-base-100 shadow-sm flex flex-col items-center py-0">
+    <h1 class="text-9xl font-extrabold tracking-wide mb-2 font-[var(--svgen-font)]">SVGEN</h1>
+    <div id="generatorSwitcher" class="space-x-2">
+      <button data-generator="blob" class="btn btn-primary">Blob</button>
+      <button data-generator="wave" class="btn btn-primary">Wave</button>
+      <button data-generator="corners" class="btn btn-primary">Corners</button>
+      <button data-generator="scatter" class="btn btn-primary">Scatter</button>
+      <button id="downloadSVG" class="btn btn-outline">Download SVG</button>
     </div>
+  </div>
 
-    <main class="relative min-h-screen flex items-center justify-center bg-base-100">
+
+    <main class="relative min-h-[80vh] flex items-center justify-center bg-base-100 mt-0 mb-0">
       <!-- Main Display -->
       <div class="w-[1000px] aspect-[1500/1002] bg-base-300 rounded-xl shadow-lg flex items-center justify-center">
         <svg id="svgContainer" class="w-full h-full"></svg>
@@ -49,7 +51,7 @@
 
           <label class="form-control w-full">
             <span class="label-text">Radius</span>
-            <input id="radius" type="range" min="50" max="200" step="1" class="range" />
+            <input id="radius" type="range" min="100" max="400" step="10" class="range" />
           </label>
 
           <label class="form-control w-full">
@@ -131,6 +133,27 @@
             <span class="label-text">Base Color</span>
             <input id="cornerBaseColor" type="color" class="input" />
           </label>
+        </div>
+        <!-- Scatter Controls -->
+        <div id="scatterControls" class="hidden flex flex-col gap-4">
+          <h3 class="text-lg font-bold">Scatter Settings</h3>
+
+          <label class="form-control w-full">
+            <span class="label-text">Blob Count</span>
+            <input id="scatterCount" type="range" min="3" max="30" step="1" class="range" />
+          </label>
+
+          <label class="form-control w-full">
+            <span class="label-text">Min Radius</span>
+            <input id="scatterMinRadius" type="range" min="20" max="100" step="1" class="range" />
+          </label>
+
+          <label class="form-control w-full">
+            <span class="label-text">Max Radius</span>
+            <input id="scatterMaxRadius" type="range" min="30" max="150" step="1" class="range" />
+          </label>
+
+          <button id="scatterRandomize" class="btn btn-accent text-white">Randomize Blobs</button>
         </div>
       </div>
     </main>

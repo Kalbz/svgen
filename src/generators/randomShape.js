@@ -8,7 +8,7 @@ export function createLayeredBlobSVG({
   numLayers = 6,
   colors = ['#FF6B6B', '#FFD93D', '#6BCB77', '#4D96FF', '#843bff', '#ff3b94'],
   opacityStep = 0.12,
-  scaleStep = 0.12,
+  scaleStep = 0.2,
   width,
   height,
   basePoints = null,

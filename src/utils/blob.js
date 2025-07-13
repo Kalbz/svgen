@@ -34,8 +34,15 @@ export function createBlob(options = {}) {
   path.setAttribute('stroke', config.stroke);
   path.setAttribute('stroke-width', config.strokeWidth);
 
-  const group = document.createElementNS(svgNS, 'g');
+const group = document.createElementNS(svgNS, 'g');
+
+if (options._scatterMode) {
+  group.classList.add('scatterBlob');
+} else {
+  svg.querySelector('#mainBlob')?.remove();
   group.setAttribute('id', 'mainBlob');
+}
+
   group.appendChild(path);
 
   svg.appendChild(group);

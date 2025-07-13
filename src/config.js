@@ -11,7 +11,7 @@ export const blobConfig = {
     pointCount: 12,
     noise: 0.3,
     smoothness: 0.8,
-    radius: 120,
+    radius: 300,
     fill: '#FF6B6B',
     stroke: '00000010',
     strokeWidth: 1
@@ -26,6 +26,6 @@ export const cornersConfig = {
     randomness: 0.3,
     whichCorners: 'tlbr', // 'tlbr' or 'trbl'
     size: 250,
-    scaleStep: 0.12, // this controls how much each layer scales
+    scaleStep: 0.32, // this controls how much each layer scales
 
 };
