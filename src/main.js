@@ -2,31 +2,108 @@ import { randomTheme } from './generators/randomTheme';
 import { changeShape } from './generators/changeShape';
 import { changeColor } from './generators/changeColor';
 // import { randomShape } from './generators/randomShape';
-import { createBlob, createRandomBlob, createOrganicBlob, createGeometricBlob } from './utils/blob';
+import { createBlob } from './utils/blob';
 import { createAutoStackedWaves } from './utils/wave';
 import { createLayeredBlobSVG } from './generators/randomShape';
 import { generateBlobPoints } from './generators/randomShape';
 import { createCornersBlobs } from './utils/corners';
 import { generatePalette } from './utils/palette';
 
-import { blobConfig, waveConfig, cornersConfig } from './config';
+import { blobConfig, waveConfig, cornersConfig, scatterConfig} from './config';
 import './style.css'
 
 import { hslToHex } from './utils/hex';
 
 import { createScatterEffect } from './utils/scatter'
 
+import Pickr from '@simonwep/pickr';
+
+import '@simonwep/pickr/dist/themes/classic.min.css'; // Or another theme
+
+
+
+const pickr = Pickr.create({
+  el: '#fillColorPicker',
+  theme: 'classic',
+  default: '#2596be',
+  comparison: false, // 👈 this is the key!
+  components: {
+    preview: true,
+    opacity: true,
+    hue: true,
+    interaction: {
+      hex: true,
+      rgba: true,
+      input: true,
+      save: true
+    }
+  }
+});
+
+
+pickr.on('change', (color) => {
+  const hex = color.toHEXA().toString();
+
+  // Update the blob fill immediately
+  updateBlob({ fill: hex });
+
+  // ✅ No need for applyColor, swatch updates automatically now!
+});
+
+
+// Wave Color
+const wavePickr = Pickr.create({
+  el: '#waveColorPicker',
+  theme: 'classic',
+  default: '#2596be',
+  comparison: false,
+  components: {
+    preview: true,
+    opacity: true,
+    hue: true,
+    interaction: {
+      hex: true,
+      rgba: true,
+      input: true
+    }
+  }
+});
+
+wavePickr.on('change', (color) => {
+  waveConfig.baseColor = color.toHEXA().toString();
+  render();
+});
+
+// Corner Base Color
+const cornerPickr = Pickr.create({
+  el: '#cornerColorPicker',
+  theme: 'classic',
+  default: '#2596be',
+  comparison: false,
+  components: {
+    preview: true,
+    opacity: true,
+    hue: true,
+    interaction: {
+      hex: true,
+      rgba: true,
+      input: true
+    }
+  }
+});
+
+cornerPickr.on('change', (color) => {
+  cornersConfig.baseColor = color.toHEXA().toString();
+  cornersConfig.palette = generatePalette(cornersConfig.baseColor, cornersConfig.steps);
+  render();
+});
+
 randomTheme();
 createBlob(blobConfig);
 
-
-const GENERATORS = {
-    blob: 'Blob',
-    wave: 'Wave',
-    river: 'River',
-};
-
 let currentGenerator = 'blob';
+
+render();
 
 const svg = document.getElementById('svgContainer');
 svg.setAttribute('viewBox', '0 0 1500 1002');
@@ -130,7 +207,6 @@ document.getElementById('strokeWidth')?.addEventListener('input', (e) =>
 // Fill Color
 document.getElementById('fillColor')?.addEventListener('input', (e) => {
   const color = hslToHex(e.target.value);
-  console.log('Fill color changed to:', color);
   updateBlob({ fill: color });
 });
 
@@ -140,29 +216,12 @@ document.getElementById('strokeColor')?.addEventListener('input', (e) =>
   updateBlob({ stroke: hslToHex(e.target.value) })
 );
 
-// Reset Button
-document.getElementById('resetBlob')?.addEventListener('click', () => {
-  Object.assign(blobConfig, {
-    pointCount: 12,
-    noise: 0.3,
-    smoothness: 0.8,
-    radius: 120,
-    fill: '#FF6B6B',
-    stroke: '#00000010',
-    strokeWidth: 1
-  });
-
-  // Update UI to match reset values
-  document.getElementById('pointCount').value = blobConfig.pointCount;
-  document.getElementById('noise').value = blobConfig.noise;
-  document.getElementById('smoothness').value = blobConfig.smoothness;
-  document.getElementById('radius').value = blobConfig.radius;
-  document.getElementById('strokeWidth').value = blobConfig.strokeWidth;
-  document.getElementById('fillColor').value = blobConfig.fill;
-  document.getElementById('strokeColor').value = blobConfig.stroke;
-
+// Color Step
+document.getElementById('blobLayeredToggle')?.addEventListener('change', (e) => {
+  blobConfig.layered = e.target.checked;
   createBlob(blobConfig);
 });
+
 
 
 // --- Bind Wave Controls ---
@@ -185,8 +244,6 @@ document.getElementById('waveBaseColor')?.addEventListener('input', (e) => {
   waveConfig.baseColor = hslToHex(e.target.value);
   render();
 });
-
-console.log(document.getElementById('fillColor'));
 
 
 // --- Bind Corners Controls ---
@@ -226,23 +283,27 @@ document.getElementById('cornerBaseColor')?.addEventListener('input', (e) => {
 
 // --- Bind Scatter Controls ---
 document.getElementById('scatterCount')?.addEventListener('input', (e) => {
-  localStorage.setItem('scatterCount', e.target.value);
+  scatterConfig.count = parseInt(e.target.value);
   render();
 });
 
 document.getElementById('scatterMinRadius')?.addEventListener('input', (e) => {
-  localStorage.setItem('scatterMinRadius', e.target.value);
+  scatterConfig.minRadius = parseInt(e.target.value);
   render();
 });
 
 document.getElementById('scatterMaxRadius')?.addEventListener('input', (e) => {
-  localStorage.setItem('scatterMaxRadius', e.target.value);
+  scatterConfig.maxRadius = parseInt(e.target.value);
   render();
 });
 
 document.getElementById('scatterRandomize')?.addEventListener('click', () => {
+  scatterConfig.randomize();
   render();
 });
+
+
+
 
 function updateBlob(newConfig) {
   Object.assign(blobConfig, newConfig);

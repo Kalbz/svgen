@@ -61,15 +61,21 @@
 
           <label class="form-control w-full">
             <span class="label-text">Fill Color</span>
-            <input id="fillColor" type="color" class="input" />
+            <div id="fillColorPicker" class="w-full"></div>
           </label>
 
-          <label class="form-control w-full">
+          <!-- <label class="form-control w-full">
             <span class="label-text">Stroke Color</span>
             <input id="strokeColor" type="color" class="input" />
+          </label> -->
+
+          <label class="form-control w-full">
+            <span class="label-text">Use Layered Style</span>
+            <input id="blobLayeredToggle" type="checkbox" class="toggle toggle-primary" />
           </label>
 
-          <button id="resetBlob" class="btn btn-error text-white mt-4">Reset to Default</button>
+
+
         </div>
 
         <!-- Wave Controls -->
@@ -92,9 +98,13 @@
           </label>
 
           <label class="form-control w-full">
-            <span class="label-text">Base Color</span>
-            <input id="waveBaseColor" type="color" class="input" />
-          </label>
+  <span class="label-text">Base Color</span>
+  <div id="waveColorPicker" class="w-full"></div>
+</label>
+
+
+          
+          
         </div>
 
         <!-- Corners Controls -->
@@ -129,10 +139,11 @@
             </select>
           </label>
 
-          <label class="form-control w-full">
-            <span class="label-text">Base Color</span>
-            <input id="cornerBaseColor" type="color" class="input" />
-          </label>
+<label class="form-control w-full">
+  <span class="label-text">Base Color</span>
+  <div id="cornerColorPicker" class="w-full"></div>
+</label>
+
         </div>
         <!-- Scatter Controls -->
         <div id="scatterControls" class="hidden flex flex-col gap-4">
